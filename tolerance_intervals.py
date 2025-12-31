@@ -39,9 +39,12 @@ def compute_nonparametric_ti(data, proportion, confidence):
     n = len(data)
     s = np.std(data, ddof=1) # Sample standard deviation
 
-    v = n - binom.ppf(n,proportion, confidence)
+  
+    v = n - binom.ppf(confidence, n, proportion)
+
     L = int(np.floor(v/2))
     U = int(np.ceil(n+1-v/2))
+    data.sort()
 
     upper_bound = data[U-1]
     lower_bound = data[L-1]
@@ -63,7 +66,7 @@ def compute_bootstrap_ti(data, proportion, confidence):
         upper_bounds.append(compute_nonparametric_ti(sample,proportion,confidence)[1])
 
     lower = np.percentile(lower_bounds, 100*((1-confidence)/2))
-    upper = np.percentile(upper_bounds, 100*(1+confidence/2))
+    upper = np.percentile(upper_bounds, 100*((1+confidence)/2))
 
     return (lower,upper)
 
@@ -78,13 +81,18 @@ def compute_bootstrap_kde_ti(data, proportion, confidence):
     for x in range(10000):
 
         sample = np.random.choice(data,size=len(data), replace = True)
-        sample = ot.Sample(sample, 1)
+        sample = np.asarray(sample).reshape(-1, 1)
+        sample = ot.Sample(sample)
+       
 
-        factory = ot.KernelSmoothing(kernel = ot.Normal())
+        factory = ot.KernelSmoothing(ot.Normal())
 
-        bandwidth = factory.computePluginBandwidth(sample)
+        # Optional: shrink plugin bandwidth
+        h = factory.computePluginBandwidth(sample)
+        #factory.setBandwidth(h)  # v = shrinkage factor from your code
 
-        distribution = factory.build(sample, bandwidth)
+        # Build KDE distribution
+        distribution = factory.build(sample)
 
 
 
@@ -92,15 +100,16 @@ def compute_bootstrap_kde_ti(data, proportion, confidence):
         upper_bounds.append(distribution.computeQuantile(0.975)[0])
 
     lower = np.percentile(lower_bounds, 100*((1-confidence)/2))
-    upper = np.percentile(upper_bounds, 100*(1+confidence/2))
+    upper = np.percentile(upper_bounds, 100*((1+confidence)/2))
 
     return (lower,upper)
 
 
 def find_sheather_bandwith(sample):
     
-    sample = ot.Sample(sample,1)
-    factory = ot.KernelSmoothing(kernel = ot.Normal())
+    sample = np.asarray(sample).reshape(-1, 1)
+    sample = ot.Sample(sample)
+    factory = ot.KernelSmoothing(ot.Normal())
     h = factory.computePluginBandwidth(sample)[0]
     return h
 
@@ -134,12 +143,16 @@ def compute_bootstrap_kde_shrunk_smooth(data, proportion, confidence):
 
 
 
-        sample = ot.Sample(new_sample, 1)
-        factory = ot.KernelSmoothing(kernel = ot.Normal())
+        sample = np.asarray(sample).reshape(-1, 1)
+        sample = ot.Sample(sample)
+        factory = ot.KernelSmoothing(ot.Normal())
 
-        bandwidth = factory.computePluginBandwidth(sample)
+        # Optional: shrink plugin bandwidth
+        h = factory.computePluginBandwidth(sample)
+      #  factory.setBandwidth(h)  # v = shrinkage factor from your code
 
-        distribution = factory.build(sample, h)
+        # Build KDE distribution
+        distribution = factory.build(sample)
 
 
 
@@ -147,7 +160,7 @@ def compute_bootstrap_kde_shrunk_smooth(data, proportion, confidence):
         upper_bounds.append(distribution.computeQuantile(0.975)[0])
 
     lower = np.percentile(lower_bounds, 100*((1-confidence)/2))
-    upper = np.percentile(upper_bounds, 100*(1+confidence/2))
+    upper = np.percentile(upper_bounds, 100*((1+confidence)/2))
 
     return (lower,upper)
 
