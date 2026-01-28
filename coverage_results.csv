@@ -1,0 +1,46 @@
+Construction Type,EmpiricalCoverage
+Normal Distribution Normal TI Coverage,0.952
+Normal Distribution Bootstrap TI Coverage,0.91
+Normal Distribution Non Parametric TI Coverage,0.957
+Normal Distribution KDE Bootstrap TI Coverage,0.99
+Normal Distribution Smooth KDE Bootstrap TI Coverage,0.99
+Chi-Square Distribution Normal TI Coverage,0.905
+Chi-Square Distribution Bootstrap TI Coverage,0.928
+Chi-Square Distribution Non Parametric TI Coverage,0.966
+Chi-Square Distribution KDE Bootstrap TI Coverage,0.991
+Chi-Square Distribution Smooth KDE Bootstrap TI Coverage,0.992
+F Distribution Normal TI Coverage,0.781
+F Distribution Bootstrap TI Coverage,0.932
+F Distribution Non Parametric TI Coverage,0.97
+F Distribution KDE Bootstrap TI Coverage,0.993
+F Distribution Smooth KDE Bootstrap TI Coverage,0.994
+Log Normal Distribution Normal TI Coverage,0.731
+Log Normal Distribution Bootstrap TI Coverage,0.911
+Log Normal Distribution Non Parametric TI Coverage,0.96
+Log Normal Distribution KDE Bootstrap TI Coverage,0.989
+Log Normal Distribution Smooth KDE Bootstrap TI Coverage,0.989
+T Distribution Normal TI Coverage,0.89
+T Distribution Bootstrap TI Coverage,0.931
+T Distribution Non Parametric TI Coverage,0.961
+T Distribution KDE Bootstrap TI Coverage,0.978
+T Distribution Smooth KDE Bootstrap TI Coverage,0.98
+Gamma Distribution Normal TI Coverage,0.65
+Gamma Distribution Bootstrap TI Coverage,0.92
+Gamma Distribution Non Parametric TI Coverage,0.955
+Gamma Distribution KDE Bootstrap TI Coverage,0.992
+Gamma Distribution Smooth KDE Bootstrap TI Coverage,0.992
+Beta Distribution Normal TI Coverage,0.768
+Beta Distribution Bootstrap TI Coverage,0.926
+Beta Distribution Non Parametric TI Coverage,0.966
+Beta Distribution KDE Bootstrap TI Coverage,0.995
+Beta Distribution Smooth KDE Bootstrap TI Coverage,0.992
+Exponential Distribution Normal TI Coverage,0.698
+Exponential Distribution Bootstrap TI Coverage,0.912
+Exponential Distribution Non Parametric TI Coverage,0.968
+Exponential Distribution KDE Bootstrap TI Coverage,0.993
+Exponential Distribution Smooth KDE Bootstrap TI Coverage,0.993
+Pareto Distribution Normal TI Coverage,0.78
+Pareto Distribution Bootstrap TI Coverage,0.929
+Pareto Distribution Non Parametric TI Coverage,0.969
+Pareto Distribution KDE Bootstrap TI Coverage,0.992
+Pareto Distribution Smooth KDE Bootstrap TI Coverage,0.992
