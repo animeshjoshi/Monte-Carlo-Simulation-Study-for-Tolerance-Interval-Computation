@@ -1,63 +1,44 @@
 import pandas as pd
-import plotly.express as px
-import panel as pn
-import plotly.graph_objects as go
-import numpy as np
-pn.extension("plotly")
 
+# Load CSV
+df = pd.read_csv("detailed_coverage_results.csv")
 
-detailed_results = pd.read_csv("detailed_coverage_results.csv")  
+# Dictionary of replacements: "find_this" : "replace_with_this"
+replacements = {
+    "Normal TI": "T1",
+    "Bootstrap TI": "T2",
+    "Non Parametric TI": "T3",
+    "KDE Bootstrap TI": "T4",
+    "Smooth KDE Bootstrap TI": "T4",
+    "Coverage": "O1",
+    "Coverages": "O1",
+    "Width": "O2",
+    "Widths": "O2",
+    "Normal Distribution": "B1",
+    "Chi-Square Distribution": "B2",
+    "F Distribution": "B3",
+    "Log Normal Distribution": "B4",
+    "T Distribution": "B5",
+    "Gamma Distribution": "B6",
+    "Beta Distribution": "B7",
+    "Exponential Distribution": "B8",
+    "Pareto Distribution": "B9"
+}
 
-coverages_columns = [c for c in detailed_results.columns if "coverages" in c.lower()]
+# Apply replacements to all column names
+new_columns = []
+for col in df.columns:
+    new_col = col
+    for find, replace in replacements.items():
+        if find in new_col:
+            new_col = new_col.replace(find, replace)
+    new_columns.append(new_col)
 
-column_selector = pn.widgets.Select(name="Select Column", options=coverages_columns)
-def create_coverage_plot(column_name):
-    col_data = detailed_results[column_name].dropna()
-    
-    # Histogram bins
-    # Histogram bins
-    bin_edges = np.histogram_bin_edges(col_data, bins='auto')
-    
-    # Compute counts per bin
-    bin_counts, _ = np.histogram(col_data, bins=bin_edges)
-    
-    # Compute bin midpoints
-    bin_midpoints = (bin_edges[:-1] + bin_edges[1:]) / 2
-    
-    # Color bins: blue if **any part of bin > 0.95**, else black
-    colors = ["blue" if i > 0.95 else "black" for i in bin_midpoints]
-    
-    # Create histogram bars manually for custom colors
-    fig = go.Figure()
-    for i in range(len(bin_edges)-1):
-        fig.add_trace(go.Bar(
-            x=[(bin_edges[i]+bin_edges[i+1])/2],
-            y=[bin_counts[i]],
-            width=[bin_edges[i+1]-bin_edges[i]],
-            marker_color=colors[i],
-            showlegend=False
-        ))
-    
-    # Add red line at 0.95
-    fig.add_vline(x=0.95, line_color="red", line_dash="dash", line_width=2)
+# Assign new column names
+df.columns = new_columns
 
-    fig.update_layout(
-        title=f"Coverage Analysis: {column_name}",
-        xaxis_title=column_name,
-        yaxis_title="Count",
-        template="plotly_white",
-        bargap=0.05
-    )
-    return fig
+# Save the updated CSV
+df.to_csv("updated_columns.csv", index=False)
 
-# Bind plot to dropdown
-plot_pane = pn.bind(create_coverage_plot, column_name=column_selector)
-
-# Panel subsection
-subsection = pn.Column(
-    "## Coverage Column Analysis",
-    column_selector,
-    plot_pane
-)
-
-subsection.servable()
+print("Columns after find-and-replace:")
+print(df.columns.tolist())
